@@ -1,14 +1,18 @@
 package com.robertocosta.crudcliente.controllers;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.robertocosta.crudcliente.dto.ClientDTO;
 import com.robertocosta.crudcliente.service.ClientService;
@@ -21,18 +25,21 @@ public class ClientController {
 	private ClientService service;
 	
 	@GetMapping
-	public Page<ClientDTO> findAll(Pageable pageable) {
-		return service.findAll(pageable);
+	public ResponseEntity<Page<ClientDTO>> findAll(Pageable pageable) {
+		return ResponseEntity.ok(service.findAll(pageable));
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ClientDTO finBiId(@PathVariable Long id) {
-		return service.findById(id);
+	public ResponseEntity<ClientDTO> finBiId(@PathVariable Long id) {
+		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@PostMapping
-	public ClientDTO insert(@RequestBody ClientDTO dto) {
-		return service.insert(dto);
+	public ResponseEntity<ClientDTO> insert(@RequestBody ClientDTO dto) {
+		dto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
 	}
 
 }
