@@ -1,9 +1,10 @@
 package com.robertocosta.crudcliente.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.robertocosta.crudcliente.dto.ClientDTO;
 import com.robertocosta.crudcliente.repositories.ClientRepository;
@@ -14,8 +15,9 @@ public class ClientService {
 	@Autowired
 	private ClientRepository repository;
 	
-	public List<ClientDTO> findAll(){
-		return repository.findAll().stream().map(x -> new ClientDTO(x)).toList();
+	@Transactional(readOnly = true)
+	public Page<ClientDTO> findAll(Pageable pageable){
+		return repository.findAll(pageable).map(x -> new ClientDTO(x));
 	}
 
 }
