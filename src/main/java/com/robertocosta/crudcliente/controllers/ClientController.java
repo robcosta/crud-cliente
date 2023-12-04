@@ -21,6 +21,8 @@ import com.robertocosta.crudcliente.dto.ClientDTO;
 import com.robertocosta.crudcliente.service.ClientService;
 import com.robertocosta.crudcliente.service.exceptions.DatabaseException;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/clients")
 public class ClientController {
@@ -39,7 +41,7 @@ public class ClientController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClientDTO> insert(@RequestBody ClientDTO dto) {
+	public ResponseEntity<ClientDTO> insert(@Valid @RequestBody ClientDTO dto) {
 		dto = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(dto.getId()).toUri();
@@ -47,7 +49,7 @@ public class ClientController {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody ClientDTO dto) {
+	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
 		try {
 			dto = service.update(id, dto);
 			return ResponseEntity.ok(dto);

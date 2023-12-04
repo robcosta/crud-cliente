@@ -2,15 +2,32 @@ package com.robertocosta.crudcliente.dto;
 
 import java.time.LocalDate;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.robertocosta.crudcliente.entities.Client;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class ClientDTO {
 
 	private Long id;
+	
+	@NotBlank(message = "Campo requerido")
 	private String name;
+	
+	@CPF(message = "CPF inválido")
 	private String cpf;
+	
+	@Positive(message = "Renda deve ser positivo")
 	private Double income;
+	
+	@PastOrPresent(message = "Data inválida")
 	private LocalDate birthDate;
+	
+	@PositiveOrZero(message = "Número de filhos não pode ser negativo")
 	private Integer children;
 
 	public ClientDTO(Long id, String name, String cpf, Double income, LocalDate birthDate, Integer children) {
