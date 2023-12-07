@@ -3,7 +3,6 @@ package com.robertocosta.crudcliente.controllers;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.robertocosta.crudcliente.dto.ClientDTO;
 import com.robertocosta.crudcliente.service.ClientService;
-import com.robertocosta.crudcliente.service.exceptions.DatabaseException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -48,21 +47,21 @@ public class ClientController {
 		return ResponseEntity.created(uri).body(dto);
 	}
 	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
-		try {
-			dto = service.update(id, dto);
-			return ResponseEntity.ok(dto);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException("CPF já cadastrado.");
-		}
-	}
-	
 //	@PutMapping(value = "/{id}")
-//	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody ClientDTO dto, HttpServletRequest request) {
+//	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
+//		try {
 //			dto = service.update(id, dto);
 //			return ResponseEntity.ok(dto);
+//		} catch (DataIntegrityViolationException e) {
+//			throw new DatabaseException("CPF já cadastrado.");
+//		}
 //	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<ClientDTO> update(@PathVariable Long id,@Valid @RequestBody ClientDTO dto) {
+			dto = service.update(id, dto);
+			return ResponseEntity.ok(dto);
+	}
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {

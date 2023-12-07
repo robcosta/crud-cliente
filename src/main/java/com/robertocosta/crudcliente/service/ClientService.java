@@ -50,14 +50,14 @@ public class ClientService {
 		try {
 			Client entity = repository.getReferenceById(id);
 			copyDtoToEntity(dto, entity);
-			entity = repository.save(entity);
+			entity = repository.saveAndFlush(entity);
 			return new ClientDTO(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Recurso não encontrado!");
 		} 
-//		catch (DataIntegrityViolationException e) {
-//			throw new DatabaseException("CPF já cadastrado.");
-//		}
+		catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("CPF já cadastrado.");
+		}
 	}
 
 	@Transactional
