@@ -18,13 +18,13 @@ public class Client {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	
+
 	@Column(unique = true)
 	private String cpf;
 	private Double income;
 	private LocalDate birthDate;
 	private Integer children;
-	
+
 	public Client() {
 	}
 
@@ -54,11 +54,11 @@ public class Client {
 	}
 
 	public String getCpf() {
-		return cpf;
+		return cpf.length() == 11 ? cpf.substring(0, 3) + "." + cpf.substring(3, 6) + "." + cpf.substring(6, 9) + "-" + cpf.substring(9): cpf;
 	}
 
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	    this.cpf = cpf.replaceAll("[^0-9]", "");
 	}
 
 	public Double getIncome() {
